@@ -155,7 +155,7 @@ def compute_q_profile(x, a, q0, qa, qform):
     Compute safety factor q-profile on radial grid.
     
     Parameters:
-        x: Radial coordinate array (nx )
+        x: Radial coordinate array (nx, )
         a: Minor radius
         q0: Central safety factor
         qa: Edge safety factor
@@ -239,7 +239,7 @@ def compute_geometry(x, y, R0, kappa, delta):
     Why this doesn't break physics:
         Because all metric elements, B-fields, Jacobian, and curvature
         are computed directly from the R,Z coordinates you define here.
-        As long as the geometry is smooth and monotonic, BOUT++ doesnt
+        As long as the geometry is smooth and monotonic, BOUT++ doesn't
         care whether the surfaces came from a GS solver or an analytic form.
     
     Future upgrade note:
@@ -262,7 +262,7 @@ def compute_geometry(x, y, R0, kappa, delta):
     This is a nonstandard but perfectly valid triangularity mapping.
     Traditional EFIT / Miller-style geometry often uses forms like:
         R = R0 + r*cos(theta + δ*sin(theta))
-    i.e. the triangularity is embedded as a shift in the poloidal angle itself.
+    i.e., the triangularity is embedded as a shift in the poloidal angle itself.
     
     The approach here (θ + δ*sinθ) produces the same qualitative shaping:
         - inboard indentation
@@ -611,10 +611,10 @@ def compute_magnetic_field(x, geom, q_xy, B0, R0, basis):
 
     #B-field sanity checks
     if np.any(~np.isfinite(Bmag)):
-        raise RuntimeError("Magnetic field magnitude contains NaN/Inf - invalid geometry or q-profile.")
+        raise RuntimeError("Magnetic field magnitude contains NaN/Inf — invalid geometry or q-profile.")
 
     if np.min(Bmag) <= 0:
-        raise RuntimeError("Magnetic field magnitude has vanished or gone negative - nonphysical configuration.")
+        raise RuntimeError("Magnetic field magnitude has vanished or gone negative — nonphysical configuration.")
 
     #Unit magnetic field vector components
     bX = (Bphi * ephi_X + Btheta * etheta_X) / Bmag
@@ -696,9 +696,9 @@ def compute_curvature(mode, bfield, basis, metric, geom, coords):
             G2: Curvature component along e_r (nx, ny, nz)
     
     Curvature calculation methods:
-        "exact"  -> full metric, Christoffel symbols, covariant derivatives
-        "simple" -> analytic tokamak curvature approximation
-        "none"   -> disable curvature calculation entirely
+        "exact"  → full metric, Christoffel symbols, covariant derivatives
+        "simple" → analytic tokamak curvature approximation
+        "none"   → disable curvature calculation entirely
     """
     nx = basis['er_X'].shape[0]
     ny = basis['er_X'].shape[1]
@@ -1128,6 +1128,22 @@ def main():
 
     #Parse command-line arguments
     args = parse_arguments()
+
+    #Round nx to nearest power of 2 for PCR solver compatibility
+    #PCR checks GlobalNxNoBoundaries = nx - 2*MXG, so we need (nx - 4) to be power of 2
+    import math
+    MXG = 2  # Guard cells (defined later, but needed here)
+    
+    if args.nx > 0:
+        # Target: (nx - 2*MXG) must be power of 2
+        nx_interior_target = args.nx - 2*MXG
+        power = round(math.log2(max(1, nx_interior_target)))
+        nx_interior_rounded = 2 ** power
+        nx_rounded = nx_interior_rounded + 2*MXG
+        
+        if nx_rounded != args.nx:
+            print(f"[WARNING] Rounding nx from {args.nx} to {nx_rounded} (interior={nx_interior_rounded}, power of 2 for PCR solver)")
+            args.nx = nx_rounded
 
     #Validate shaping parameters
     validate_shaping_parameters(args.kappa, args.delta)
