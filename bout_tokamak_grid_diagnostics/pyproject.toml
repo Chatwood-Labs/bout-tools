@@ -1,0 +1,131 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bout-tokamak-grid-diagnostics"
+version = "1.0.0"
+description = "Grid diagnostics and reporting for BOUT++ grids (tokamak-focused but not limited)."
+readme = "README.md"
+requires-python = ">=3.10"
+
+license = "MIT"
+license-files = ["LICENSE"]
+
+authors = [
+  { name = "Chatwood Labs Ltd" }
+]
+maintainers = [
+  { name = "Chatwood Labs Ltd" }
+]
+
+keywords = [
+  "BOUT++",
+  "plasma",
+  "tokamak",
+  "fusion",
+  "diagnostics",
+  "grid",
+  "netcdf",
+  "xarray",
+  "matplotlib"
+]
+
+classifiers = [
+  "Development Status :: 4 - BETA",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+  "numpy>=1.23",
+  "matplotlib>=3.6",
+  "xarray>=2023.1.0",
+  "netCDF4>=1.6.0"
+]
+
+[project.optional-dependencies]
+# Optional alternative netCDF engine (common in some HPC stacks)
+hpc = [
+  "h5netcdf>=1.2"
+]
+
+# Optional chunking backend:
+#
+# This tool can open datasets with `xarray.open_dataset(..., chunks=...)`
+# when --force-chunk is used or when the internal memory heuristic enables chunking.
+# xarray's chunked/lazy arrays are powered by Dask, so installs that intend
+# to use chunking should include this extra.
+chunking = [
+  "dask[array]>=2023.1.0"
+]
+
+# Dev tooling
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "mypy>=1.10",
+  "build>=1.2",
+  "twine>=5.1"
+]
+
+[project.scripts]
+bout-tokamak-grid-diagnostics = "bout_tokamak_grid_diagnostics:main_cli"
+bout-grid-diagnostics = "bout_tokamak_grid_diagnostics:main_cli"
+
+
+[project.urls]
+Homepage = "https://github.com/Chatwood-Labs/bout-tools/"
+Repository = "https://github.com/Chatwood-Labs/bout-tools/"
+Issues = "https://github.com/Chatwood-Labs/bout-tools/issues"
+
+[tool.setuptools]
+py-modules = ["bout_tokamak_grid_diagnostics"]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  # Treat *all* RuntimeWarnings as errors by default.
+  #
+  # This forces the test suite to fail loudly on numerical issues,
+  # invalid operations, and other genuinely dangerous conditions
+  # that would otherwise be easy to miss in scientific code.
+  "error::RuntimeWarning",
+
+  # Suppress NumPy ABI compatibility warnings of the form:
+  #   "numpy.ndarray size changed, may indicate binary incompatibility"
+  #
+  # These warnings are emitted when a C-extension (e.g. netCDF4, h5py)
+  # was compiled against a different NumPy version than the one
+  # currently installed.
+  #
+  # In our case:
+  #   - The affected libraries are known to function correctly at runtime
+  #   - The warning is non-fatal and does not affect correctness
+  #   - Treating it as an error breaks tests in otherwise valid environments
+  #
+  # This is a known, unavoidable issue in scientific Python stacks
+  # and is explicitly ignored here to keep tests meaningful.
+  "ignore:numpy.ndarray size changed.*:RuntimeWarning",
+
+  # Suppress xarray backend discovery warnings such as:
+  #   "Engine 'bout_adios2' loading failed"
+  #
+  # xarray attempts to auto-load *all* registered backends via
+  # Python entry points at import/open time. In BOUT environments,
+  # some optional backends (e.g. xbout / ADIOS2) may be installed
+  # but not fully functional or ABI-compatible.
+  #
+  # These warnings:
+  #   - Do NOT affect the ability to read NetCDF grids
+  #   - Are emitted during backend probing, not actual usage
+  #   - Become fatal when RuntimeWarnings are treated as errors
+  #
+  # We explicitly ignore them to avoid failing tests due to
+  # unrelated, optional backends.
+  "ignore:Engine '.*' loading failed.*:RuntimeWarning",
+]

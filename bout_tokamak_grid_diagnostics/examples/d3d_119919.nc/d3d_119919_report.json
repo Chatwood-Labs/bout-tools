@@ -1,0 +1,148 @@
+{
+  "B_max": 3.5772924423217773,
+  "B_min": 1.486179232597351,
+  "J_max": null,
+  "J_min": null,
+  "aspect_ratio": 0.0,
+  "bfield_img": "d3d_119919_bfield.png",
+  "checks": [
+    {
+      "details": {
+        "message": "Variable 'R' exists"
+      },
+      "name": "required_var:R",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'Z' exists"
+      },
+      "name": "required_var:Z",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g11' exists"
+      },
+      "name": "required_var:g11",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'g22' exists"
+      },
+      "name": "required_var:g22",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'g33' exists"
+      },
+      "name": "required_var:g33",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'g12' exists"
+      },
+      "name": "required_var:g12",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'g13' exists"
+      },
+      "name": "required_var:g13",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'g23' exists"
+      },
+      "name": "required_var:g23",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'J' exists"
+      },
+      "name": "required_var:J",
+      "severity": "CRITICAL",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "Variable 'surfvol' exists (optional)"
+      },
+      "name": "optional_var:surfvol",
+      "severity": "INFO",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "ordering": "NON_MONOTONIC"
+      },
+      "name": "geometry:radial_ordering",
+      "severity": "WARN",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "R monotonic with x at outboard midplane (global ordering non-monotonic)"
+      },
+      "name": "geometry:R_outboard_monotonic_x",
+      "severity": "WARN",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "Z_mean": 1.2741612195968628,
+        "message": "Z mean \u2248 0 (tol=2.78e-04, balanced poloidal extent)",
+        "tol": 0.00027834417819976807
+      },
+      "name": "geometry:Z_mean_near_zero",
+      "severity": "WARN",
+      "status": "FAIL"
+    }
+  ],
+  "config_type": "UNKNOWN",
+  "critical_failures": [
+    "Missing required field: g11",
+    "Missing required field: g22",
+    "Missing required field: g33",
+    "Missing required field: g12",
+    "Missing required field: g13",
+    "Missing required field: g23",
+    "Missing required field: J"
+  ],
+  "dimensionality": "2D",
+  "g11_max": null,
+  "g11_min": null,
+  "g22_max": null,
+  "g22_min": null,
+  "g33_max": null,
+  "g33_min": null,
+  "grid_format": "BOUT4_STYLE",
+  "grid_type": "UNKNOWN",
+  "kappa": 24.44367758546703,
+  "metric_det_alt_mean_rel_err": null,
+  "metric_det_max_rel_err": null,
+  "metric_det_mean_rel_err": null,
+  "metric_det_relation": null,
+  "metric_interpretation": null,
+  "nx": 48,
+  "ny": 128,
+  "nz": null,
+  "render_img": "d3d_119919_render.png",
+  "surf_max": null,
+  "surf_min": null,
+  "warnings": []
+}

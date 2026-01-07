@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--
+          SECURITY / ROBUSTNESS NOTE:
+          Even though `path` normally comes from the local filesystem, it is still untrusted input
+          (e.g. weird filenames or upstream wrappers). Always HTML-escape values before injecting
+          into markup to prevent accidental HTML/script injection.
+        -->
+        <title>BOUT++ Grid Diagnostics Report - grid_circular_reference.nc</title>
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                line-height: 1.6;
+            }
+            
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                overflow: hidden;
+            }
+            
+            .header {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                color: white;
+                padding: 40px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+            
+            .header .filename {
+                font-size: 1.2em;
+                opacity: 0.9;
+                font-family: monospace;
+                background: rgba(255,255,255,0.1);
+                padding: 10px 20px;
+                border-radius: 5px;
+                display: inline-block;
+                margin-top: 10px;
+            }
+            
+            .verdict {
+                padding: 30px 40px;
+                text-align: center;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
+            
+            .verdict.valid {
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                color: white;
+            }
+            
+            .verdict.invalid {
+                background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+                color: white;
+            }
+            
+            .verdict .icon {
+                font-size: 3em;
+                margin-bottom: 10px;
+            }
+            
+            .content {
+                padding: 40px;
+            }
+            
+            .section {
+                margin-bottom: 40px;
+            }
+            
+            .section h2 {
+                color: #1e3c72;
+                border-bottom: 3px solid #667eea;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                font-size: 1.8em;
+            }
+            
+            .grid-info {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .info-card {
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid #667eea;
+            }
+            
+            .info-card h3 {
+                color: #1e3c72;
+                font-size: 0.9em;
+                text-transform: uppercase;
+                margin-bottom: 5px;
+                opacity: 0.8;
+            }
+            
+            .info-card .value {
+                font-size: 1.8em;
+                font-weight: bold;
+                color: #2a5298;
+            }
+            
+            .check-list {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+            
+            .check-item {
+                padding: 10px;
+                margin: 5px 0;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .check-item.pass {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .check-item.skip {
+                background: #e2e3e5;
+                color: #383d41;
+            }
+
+            
+            .check-item.fail {
+                background: #f8d7da;
+                color: #721c24;
+            }
+            
+            .check-item .icon {
+                margin-right: 10px;
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+            
+            .warnings {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 20px;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+            
+            .warnings h3 {
+                color: #856404;
+                margin-bottom: 10px;
+            }
+            
+            .warnings ul {
+                list-style: none;
+                padding-left: 0;
+            }
+            
+            .warnings li {
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(133,100,4,0.1);
+            }
+            
+            .warnings li:before {
+                content: "⚠ ";
+                margin-right: 8px;
+            }
+            
+            .failures {
+                background: #f8d7da;
+                border-left: 4px solid #dc3545;
+                padding: 20px;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+            
+            .failures h3 {
+                color: #721c24;
+                margin-bottom: 10px;
+            }
+            
+            .failures ul {
+                list-style: none;
+                padding-left: 0;
+            }
+            
+            .failures li {
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(114,28,36,0.1);
+                font-weight: bold;
+            }
+            
+            .failures li:before {
+                content: "✗ ";
+                margin-right: 8px;
+            }
+            
+            .visualization {
+                margin: 30px 0;
+                text-align: center;
+            }
+            
+            .visualization img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                margin: 10px 0;
+            }
+            
+            .visualization h3 {
+                color: #2a5298;
+                margin-bottom: 15px;
+                font-size: 1.4em;
+            }
+            
+            .metrics-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                background: white;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+            
+            .metrics-table th {
+                background: #1e3c72;
+                color: white;
+                padding: 15px;
+                text-align: left;
+                font-weight: 600;
+            }
+            
+            .metrics-table td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .metrics-table tr:hover {
+                background: #f8f9fa;
+            }
+            
+            .footer {
+                background: #2a5298;
+                color: white;
+                padding: 20px;
+                text-align: center;
+                font-size: 0.9em;
+            }
+            
+            .footer a {
+                color: #38ef7d;
+                text-decoration: none;
+            }
+
+            /* Collapsible grouped checklist (accordion) */
+            details.check-group {
+                background: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+                margin: 12px 0;
+                overflow: hidden;
+                border: 1px solid #e9ecef;
+            }
+
+            summary.check-group-summary {
+                cursor: pointer;
+                list-style: none;
+                padding: 14px 16px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                user-select: none;
+            }
+
+            summary.check-group-summary::-webkit-details-marker {
+                display: none;
+            }
+
+            .group-title {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 1.05em;
+            }
+
+            .group-pill {
+                font-weight: 800;
+                padding: 3px 10px;
+                border-radius: 999px;
+                font-size: 0.85em;
+                color: white;
+            }
+
+            .pill-critical { background: #dc3545; }
+            .pill-warn     { background: #ffc107; color: #212529; }
+            .pill-info     { background: #6c757d; }
+
+            .group-counts {
+                font-family: monospace;
+                font-size: 0.9em;
+                opacity: 0.85;
+            }
+
+            .group-body {
+                padding: 10px 14px 14px 14px;
+                background: #f8f9fa;
+            }
+
+            
+            @media print {
+                body {
+                    background: white;
+                    padding: 0;
+                }
+                .container {
+                    box-shadow: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>BOUT++ Grid Diagnostics Report</h1>
+
+                <!--
+                  SECURITY / ROBUSTNESS NOTE:
+                  Filenames can contain characters that have meaning in HTML.
+                  Escape before embedding to avoid broken markup or injection.
+                -->
+                <div class="filename">grid_circular_reference.nc</div>
+            </div>
+            
+            <div class="verdict valid">
+                <div class="icon">✓</div>
+                <div>Grid File VALID</div>
+            </div>
+            
+            <div class="content">
+                <div class="section">
+                    <h2>Grid Summary</h2>
+                    <div class="grid-info">
+                        <div class="info-card">
+                            <h3>Grid Type</h3>
+                            <div class="value">UNIFORM_FLUX</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Grid Format</h3>
+                            <div class="value">BOUT5_STYLE</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Configuration</h3>
+                            <div class="value">LIMITER</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Dimensions (x×y×z)</h3>
+                            <div class="value">64×64×64</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Dimensionality</h3>
+                            <div class="value">3D</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Elongation κ</h3>
+                            <div class="value">2.22</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Aspect Ratio</h3>
+                            <div class="value">6.67</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>Metric Interpretation</h3>
+                            <div class="value">COVARIANT</div>
+                        </div>
+                        <div class="info-card">
+                            <h3>det(g) vs J Consistency</h3>
+                            <div class="value" style="font-size: 1.1em;">
+                                det(g_ij) ≈ J²<br>
+                                <span style="font-size: 0.9em; font-family: monospace;">
+                                    mean=1.6108897880192276e-16
+                                    max=9.083175367573511e-16
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+            
+                        <div class="check-list">
+                            <div class="check-item pass">
+                                <span class="icon">✓</span>
+                                <span>No critical failures reported</span>
+                            </div>
+
+                            <div style="margin-top: 12px; font-size: 0.95em;">
+                                <strong>Checks:</strong>
+                                <span style="font-family: monospace;">PASS=38 FAIL=0 SKIP=1</span>
+                            </div>
+
+                            <div style="margin-top: 15px;">
+            
+                                    <details class="check-group" >
+                                        <summary class="check-group-summary">
+                                            <div class="group-title">
+                                                <span class="group-pill pill-critical">CRITICAL</span>
+                                                <span>CRITICAL checks</span>
+                                            </div>
+                                            <div class="group-counts">PASS=29 FAIL=0 SKIP=0</div>
+                                        </summary>
+                                        <div class="group-body">
+                
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:R</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;R&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:Z</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;Z&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g11</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g11&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g22</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g22&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g33</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g33&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g12</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g12&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g13</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g13&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:g23</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;g23&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>required_var:J</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;J&#x27; exists</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g11:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=0.9999999999999997, max=1.0000000000000004</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g11:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=0.9999999999999997, max=1.0000000000000004</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g22:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=0.009999999999999997, max=1.0000000000000002</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g22:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=0.009999999999999997, max=1.0000000000000002</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g33:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=3.9999999999999996, max=16.000000000000004</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g33:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=3.9999999999999996, max=16.000000000000004</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g12:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-2.220446049250313e-16, max=2.220446049250313e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g12:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-2.220446049250313e-16, max=2.220446049250313e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g13:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-4.440892098500626e-16, max=6.661338147750939e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g13:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-4.440892098500626e-16, max=6.661338147750939e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g23:no_nan</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-4.440892098500626e-16, max=4.440892098500626e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g23:no_inf</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min=-4.440892098500626e-16, max=4.440892098500626e-16</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>jacobian:sign_consistent</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">ref_sign=-1.0, J_min=-4.000000000000001, J_max=-0.2899999999999999, unique_nonzero_signs=[-1.0]</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>Bxy positive</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">B_min=1.9112297641174085, B_max=3.7545696894334073</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g11:positive</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">count_nonpos=0, min=0.9999999999999997, message=g11 &gt; 0 (positive definite)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g22:positive</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">count_nonpos=0, min=0.009999999999999997, message=g22 &gt; 0 (positive definite)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:g33:positive</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">count_nonpos=0, min=3.9999999999999996, message=g33 &gt; 0 (positive definite)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:leading_minor_2x2_positive</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">bad_points=0, message=Leading 2x2 principal minor &gt; 0 (g11*g22 - g12^2)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>det(g_ij) ≈ J² (metric consistency)</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">mean_rel_error=1.6108897880192276e-16, max_rel_error=9.083175367573511e-16, bad_threshold=0.01, bad_count=0, bad_fraction=0.0, worst_points=[{&#x27;index&#x27;: (23, 34, 17), &#x27;rel_error&#x27;: 9.083175367573511e-16, &#x27;R&#x27;: 2.579663451255758, &#x27;Z&#x27;: -0.08361013800691217}, {&#x27;index&#x27;: (7, 31, 32), &#x27;rel_error&#x27;: 8.844544801672375e-16, &#x27;R&#x27;: 2.8009630546655604, &#x27;Z&#x27;: 0.019603428065912167}, {&#x27;index&#x27;: (7, 31, 31), &#x27;rel_error&#x27;: 8.844544801672375e-16, &#x27;R&#x27;: 2.8009630546655604, &#x27;Z&#x27;: 0.019603428065912167}, {&#x27;index&#x27;: (6, 15, 57), &#x27;rel_error&#x27;: 8.834107263449482e-16, &#x27;R&#x27;: 3.0182031832040614, &#x27;Z&#x27;: 0.1848200206676937}, {&#x27;index&#x27;: (53, 52, 54), &#x27;rel_error&#x27;: 8.731993367747091e-16, &#x27;R&#x27;: 3.3280143705986487, &#x27;Z&#x27;: -0.7918967421525314}, {&#x27;index&#x27;: (63, 30, 18), &#x27;rel_error&#x27;: 8.713551475812022e-16, &#x27;R&#x27;: 2.0192147195967696, &#x27;Z&#x27;: 0.1950903220161286}, {&#x27;index&#x27;: (0, 2, 37), &#x27;rel_error&#x27;: 8.675342891212505e-16, &#x27;R&#x27;: 3.098078528040323, &#x27;Z&#x27;: 0.019509032201612826}, {&#x27;index&#x27;: (0, 1, 12), &#x27;rel_error&#x27;: 8.667284148043321e-16, &#x27;R&#x27;: 3.09951847266722, &#x27;Z&#x27;: 0.009801714032956061}, {&#x27;index&#x27;: (33, 61, 32), &#x27;rel_error&#x27;: 8.648828020515734e-16, &#x27;R&#x27;: 3.5468230489898334, &#x27;Z&#x27;: -0.1658769584311214}, {&#x27;index&#x27;: (33, 61, 31), &#x27;rel_error&#x27;: 8.648828020515734e-16, &#x27;R&#x27;: 3.5468230489898334, &#x27;Z&#x27;: -0.1658769584311214}]</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>jacobian:boundary_min_abs</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">min_abs=0.2899999999999999, threshold=1e-10, message=No Jacobian singularities at boundaries</div>
+                    
+                                        </div>
+                                    </details>
+                
+                                    <details class="check-group" >
+                                        <summary class="check-group-summary">
+                                            <div class="group-title">
+                                                <span class="group-pill pill-warn">WARN</span>
+                                                <span>WARN checks</span>
+                                            </div>
+                                            <div class="group-counts">PASS=7 FAIL=0 SKIP=0</div>
+                                        </summary>
+                                        <div class="group-body">
+                
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>geometry:R_outboard_monotonic_x</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=R increases with x at outboard midplane (standard ordering)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>geometry:Z_mean_near_zero</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">tol=0.0001, Z_mean=7.055784450628322e-18, message=Z mean ≈ 0 (tol=1.00e-04, balanced poloidal extent)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>surfvol:sign_consistent</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">ref_sign=-1.0, surf_min=-0.002203036696671733, surf_max=-1.157971163688079e-05</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>surfvol:sign_matches_J</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">surf_ref_sign=-1.0, J_ref_sign=-1.0</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>surfvol:ratio_finite</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">ratio_min=3.993004012717515e-05, ratio_max=0.0005507591741679332</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>shift:shiftAngle:monotonic_y</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">wrap_artifact=False, label=shiftAngle monotonic in y, dims=[&#x27;x&#x27;, &#x27;y&#x27;]</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>metric:conditioning_ok</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">ratio=1600.000000000001, threshold=1000000.0</div>
+                    
+                                        </div>
+                                    </details>
+                
+                                    <details class="check-group" >
+                                        <summary class="check-group-summary">
+                                            <div class="group-title">
+                                                <span class="group-pill pill-info">INFO</span>
+                                                <span>INFO checks</span>
+                                            </div>
+                                            <div class="group-counts">PASS=2 FAIL=0 SKIP=1</div>
+                                        </summary>
+                                        <div class="group-body">
+                
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>optional_var:surfvol</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">message=Variable &#x27;surfvol&#x27; exists (optional)</div>
+                    
+                                            <div class="check-item pass">
+                                                <span class="icon">✓</span>
+                                                <span>geometry:radial_ordering</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">ordering=OUTWARD</div>
+                    
+                                            <div class="check-item skip">
+                                                <span class="icon">⏭</span>
+                                                <span>geometry:g33_matches_R2</span>
+                                            </div>
+                                            <div style="margin-left: 28px; font-family: monospace; font-size: 0.9em; opacity: 0.85;">reason=z not radians, z_units=arb, ratio_median=1.0, ratio_p05=1.0, ratio_p95=1.0</div>
+                    
+                                        </div>
+                                    </details>
+                
+                                </div>
+                            </div>
+            
+                    <div style="margin-top: 12px; font-size: 0.95em; opacity: 0.9;">
+                        <em>
+                            Detailed results are shown in the grouped checklist above
+                            (CRITICAL / WARN / INFO).
+                        </em>
+                    </div>
+            
+                </div>
+                
+                <div class="section">
+                    <h2>Detailed Metrics</h2>
+                    <table class="metrics-table">
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Minimum</th>
+                                <th>Maximum</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                            <tr>
+                                <td><strong>g11</strong></td>
+                                <td>1.0000e+00</td>
+                                <td>1.0000e+00</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                            <tr>
+                                <td><strong>g22</strong></td>
+                                <td>1.0000e-02</td>
+                                <td>1.0000e+00</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                            <tr>
+                                <td><strong>g33</strong></td>
+                                <td>4.0000e+00</td>
+                                <td>1.6000e+01</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                            <tr>
+                                <td><strong>Jacobian J</strong></td>
+                                <td>-4.0000e+00</td>
+                                <td>-2.9000e-01</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                            <tr>
+                                <td><strong>surfvol</strong></td>
+                                <td>-2.2030e-03</td>
+                                <td>-1.1580e-05</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                            <tr>
+                                <td><strong>B-field |B|</strong></td>
+                                <td>1.9112e+00</td>
+                                <td>3.7546e+00</td>
+                                <td>✓ OK</td>
+                            </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="section">
+                    <h2>Grid Geometry & Curvature</h2>
+                    <div class="visualization">
+                        <img src="./grid_circular_reference_render.png" alt="Grid Geometry Visualization">
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2>Magnetic Field Structure</h2>
+                    <div class="visualization">
+                        <img src="./grid_circular_reference_bfield.png" alt="Magnetic Field Visualization">
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="footer">
+                Generated by <strong>Chatwood Labs BOUT++ Grid Diagnostics Utility</strong><br>
+                <small>BOUT++ 5.x Compatible | Python Grid Validation Tool</small>
+            </div>
+        </div>
+    </body>
+    </html>
+    

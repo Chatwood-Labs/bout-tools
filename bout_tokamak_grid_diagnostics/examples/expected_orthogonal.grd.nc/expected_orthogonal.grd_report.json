@@ -1,0 +1,482 @@
+{
+  "B_max": 1.8279345019864435,
+  "B_min": 0.29610281389091686,
+  "J_max": 13.657027626683192,
+  "J_min": 0.1203859330556516,
+  "aspect_ratio": 13.049981285878959,
+  "bfield_img": "expected_orthogonal.grd_bfield.png",
+  "checks": [
+    {
+      "details": {
+        "message": "Variable 'R' exists"
+      },
+      "name": "required_var:R",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'Z' exists"
+      },
+      "name": "required_var:Z",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g11' exists"
+      },
+      "name": "required_var:g11",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g22' exists"
+      },
+      "name": "required_var:g22",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g33' exists"
+      },
+      "name": "required_var:g33",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g12' exists"
+      },
+      "name": "required_var:g12",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g13' exists"
+      },
+      "name": "required_var:g13",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g23' exists"
+      },
+      "name": "required_var:g23",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'J' exists"
+      },
+      "name": "required_var:J",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'surfvol' exists (optional)"
+      },
+      "name": "optional_var:surfvol",
+      "severity": "INFO",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "ordering": "NON_MONOTONIC"
+      },
+      "name": "geometry:radial_ordering",
+      "severity": "WARN",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "message": "R monotonic with x at outboard midplane (global ordering non-monotonic)"
+      },
+      "name": "geometry:R_outboard_monotonic_x",
+      "severity": "WARN",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "Z_mean": -1.012625808640033e-05,
+        "message": "Z mean \u2248 0 (tol=1.90e-04, balanced poloidal extent)",
+        "tol": 0.00019012125914757183
+      },
+      "name": "geometry:Z_mean_near_zero",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ratio_median": 343.5352621147108,
+        "ratio_p05": 0.7159071314113691,
+        "ratio_p95": 4953.627682615994,
+        "reason": "z not radians",
+        "z_units": "unknown"
+      },
+      "name": "geometry:g33_matches_R2",
+      "severity": "INFO",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "max": 0.19114426579546082,
+        "min": 0.00011944032973525033
+      },
+      "name": "metric:g11:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 0.19114426579546082,
+        "min": 0.00011944032973525033
+      },
+      "name": "metric:g11:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 11965.391963975337,
+        "min": 0.35798030393779134
+      },
+      "name": "metric:g22:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 11965.391963975337,
+        "min": 0.35798030393779134
+      },
+      "name": "metric:g22:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 3185.1159262127444,
+        "min": 0.5934374935991134
+      },
+      "name": "metric:g33:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 3185.1159262127444,
+        "min": 0.5934374935991134
+      },
+      "name": "metric:g33:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 0.0,
+        "min": 0.0
+      },
+      "name": "metric:g12:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 0.0,
+        "min": 0.0
+      },
+      "name": "metric:g12:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": -0.0,
+        "min": -0.0
+      },
+      "name": "metric:g13:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": -0.0,
+        "min": -0.0
+      },
+      "name": "metric:g13:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": -0.2325101478826712,
+        "min": -1111.9681399556077
+      },
+      "name": "metric:g23:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": -0.2325101478826712,
+        "min": -1111.9681399556077
+      },
+      "name": "metric:g23:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "J_max": 13.657027626683192,
+        "J_min": 0.1203859330556516,
+        "ref_sign": 1.0,
+        "unique_nonzero_signs": [
+          1.0
+        ]
+      },
+      "name": "jacobian:sign_consistent",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "surfvol missing (optional)"
+      },
+      "name": "surfvol:present",
+      "severity": "INFO",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "reason": "surfvol missing"
+      },
+      "name": "surfvol:sign_consistent",
+      "severity": "INFO",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "reason": "surfvol missing"
+      },
+      "name": "surfvol:ratio_finite",
+      "severity": "INFO",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "B_max": 1.8279345019864435,
+        "B_min": 0.29610281389091686
+      },
+      "name": "Bxy positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "dims": [
+          "x"
+        ],
+        "reason": "no recognizable poloidal dim"
+      },
+      "name": "shift:shiftAngle:monotonic_y",
+      "severity": "WARN",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g11 > 0 (positive definite)",
+        "min": 0.00011944032973525033
+      },
+      "name": "metric:g11:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g22 > 0 (positive definite)",
+        "min": 0.35798030393779134
+      },
+      "name": "metric:g22:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g33 > 0 (positive definite)",
+        "min": 0.5934374935991134
+      },
+      "name": "metric:g33:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "bad_points": 0,
+        "message": "Leading 2x2 principal minor > 0 (g11*g22 - g12^2)"
+      },
+      "name": "metric:leading_minor_2x2_positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "bad_count": 0,
+        "bad_fraction": 0.0,
+        "bad_threshold": 0.01,
+        "max_rel_error": 3.1644423548616694e-13,
+        "mean_rel_error": 5.13283970929629e-15,
+        "worst_points": [
+          {
+            "R": 0.5924179738596063,
+            "Z": 1.5046669515276965,
+            "index": [
+              4,
+              25
+            ],
+            "rel_error": 3.1644423548616694e-13
+          },
+          {
+            "R": 0.5924179738596063,
+            "Z": -1.5046669515276965,
+            "index": [
+              4,
+              34
+            ],
+            "rel_error": 1.404345224936847e-13
+          },
+          {
+            "R": 0.5864310290710362,
+            "Z": 1.3983650793685973,
+            "index": [
+              4,
+              13
+            ],
+            "rel_error": 8.590614148359197e-14
+          },
+          {
+            "R": 0.5825690941588292,
+            "Z": 1.5036764645982306,
+            "index": [
+              4,
+              14
+            ],
+            "rel_error": 7.454638710629452e-14
+          },
+          {
+            "R": 0.5864310290710362,
+            "Z": -1.3983650793685973,
+            "index": [
+              4,
+              6
+            ],
+            "rel_error": 7.07040530073625e-14
+          },
+          {
+            "R": 0.6298341535532022,
+            "Z": 1.401079269721217,
+            "index": [
+              4,
+              26
+            ],
+            "rel_error": 6.988699623407207e-14
+          },
+          {
+            "R": 0.6088331657748943,
+            "Z": -1.3510707076799835,
+            "index": [
+              3,
+              6
+            ],
+            "rel_error": 4.3026708672934047e-14
+          },
+          {
+            "R": 0.5825690941588293,
+            "Z": -1.5036764645982306,
+            "index": [
+              4,
+              5
+            ],
+            "rel_error": 3.1281045270761285e-14
+          },
+          {
+            "R": 0.6298341535532016,
+            "Z": -1.4010792697212173,
+            "index": [
+              4,
+              33
+            ],
+            "rel_error": 2.960490812693408e-14
+          },
+          {
+            "R": 0.5821159049245115,
+            "Z": 1.5374581979603925,
+            "index": [
+              3,
+              14
+            ],
+            "rel_error": 2.8203708575260076e-14
+          }
+        ]
+      },
+      "name": "det(g^{ij}) \u2248 1/J\u00b2 (metric consistency)",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "No Jacobian singularities at boundaries",
+        "min_abs": 0.1203859330556516,
+        "threshold": 1e-10
+      },
+      "name": "jacobian:boundary_min_abs",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ratio": 100178825.61524779,
+        "threshold": 1000000.0
+      },
+      "name": "metric:conditioning_ok",
+      "severity": "WARN",
+      "status": "FAIL"
+    }
+  ],
+  "config_type": "LIMITER",
+  "critical_failures": [],
+  "dimensionality": "2D",
+  "g11_max": 0.19114426579546082,
+  "g11_min": 0.00011944032973525033,
+  "g22_max": 11965.391963975337,
+  "g22_min": 0.35798030393779134,
+  "g33_max": 3185.1159262127444,
+  "g33_min": 0.5934374935991134,
+  "grid_format": "BOUT4_STYLE",
+  "grid_type": "EQUILIBRIUM",
+  "kappa": 39.74190999522339,
+  "metric_det_alt_mean_rel_err": 203.16221533021456,
+  "metric_det_max_rel_err": 3.1644423548616694e-13,
+  "metric_det_mean_rel_err": 5.13283970929629e-15,
+  "metric_det_relation": "det(g^{ij}) \u2248 1/J\u00b2",
+  "metric_interpretation": "CONTRAVARIANT",
+  "nx": 10,
+  "ny": 40,
+  "nz": null,
+  "render_img": "expected_orthogonal.grd_render.png",
+  "surf_max": null,
+  "surf_min": null,
+  "warnings": [
+    "Poor metric conditioning (ratio=1.00e+08)",
+    "surfvol missing (optional) - surfvol/J consistency check skipped"
+  ]
+}

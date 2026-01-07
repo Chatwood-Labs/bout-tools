@@ -1,0 +1,495 @@
+{
+  "B_max": 7.830804159665519,
+  "B_min": 4.05906083791518,
+  "J_max": -1.3667999999999996,
+  "J_min": -37.080400000000004,
+  "aspect_ratio": 6.689954981655715,
+  "bfield_img": "grid_iterish_k1.7_d0.33_bfield.png",
+  "checks": [
+    {
+      "details": {
+        "message": "Variable 'R' exists"
+      },
+      "name": "required_var:R",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'Z' exists"
+      },
+      "name": "required_var:Z",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g11' exists"
+      },
+      "name": "required_var:g11",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g22' exists"
+      },
+      "name": "required_var:g22",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g33' exists"
+      },
+      "name": "required_var:g33",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g12' exists"
+      },
+      "name": "required_var:g12",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g13' exists"
+      },
+      "name": "required_var:g13",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'g23' exists"
+      },
+      "name": "required_var:g23",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'J' exists"
+      },
+      "name": "required_var:J",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "Variable 'surfvol' exists (optional)"
+      },
+      "name": "optional_var:surfvol",
+      "severity": "INFO",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ordering": "INWARD"
+      },
+      "name": "geometry:radial_ordering",
+      "severity": "INFO",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "R decreases with x at outboard midplane (reversed ordering)"
+      },
+      "name": "geometry:R_outboard_monotonic_x",
+      "severity": "WARN",
+      "status": "FAIL"
+    },
+    {
+      "details": {
+        "Z_mean": 1.0603158433729332e-17,
+        "message": "Z mean \u2248 0 (tol=3.40e-04, balanced poloidal extent)",
+        "tol": 0.0003399231216323405
+      },
+      "name": "geometry:Z_mean_near_zero",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ratio_median": 1.0,
+        "ratio_p05": 1.0,
+        "ratio_p95": 1.0,
+        "reason": "z not radians",
+        "z_units": "arb"
+      },
+      "name": "geometry:g33_matches_R2",
+      "severity": "INFO",
+      "status": "SKIP"
+    },
+    {
+      "details": {
+        "max": 2.889145390071969,
+        "min": 0.9999999999999999
+      },
+      "name": "metric:g11:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 2.889145390071969,
+        "min": 0.9999999999999999
+      },
+      "name": "metric:g11:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 20.448484,
+        "min": 0.046696844560923566
+      },
+      "name": "metric:g22:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 20.448484,
+        "min": 0.046696844560923566
+      },
+      "name": "metric:g22:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 67.24000000000001,
+        "min": 17.639999999999997
+      },
+      "name": "metric:g33:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 67.24000000000001,
+        "min": 17.639999999999997
+      },
+      "name": "metric:g33:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 2.4077721166878505,
+        "min": -2.4077721166878505
+      },
+      "name": "metric:g12:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 2.4077721166878505,
+        "min": -2.4077721166878505
+      },
+      "name": "metric:g12:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 1.3322676295501878e-15,
+        "min": -1.3322676295501878e-15
+      },
+      "name": "metric:g13:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 1.3322676295501878e-15,
+        "min": -1.3322676295501878e-15
+      },
+      "name": "metric:g13:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 1.7763568394002505e-15,
+        "min": -1.7763568394002505e-15
+      },
+      "name": "metric:g23:no_nan",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "max": 1.7763568394002505e-15,
+        "min": -1.7763568394002505e-15
+      },
+      "name": "metric:g23:no_inf",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "J_max": -1.3667999999999996,
+        "J_min": -37.080400000000004,
+        "ref_sign": -1.0,
+        "unique_nonzero_signs": [
+          -1.0
+        ]
+      },
+      "name": "jacobian:sign_consistent",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ref_sign": -1.0,
+        "surf_max": -0.0004516665835516384,
+        "surf_min": -0.16746343795089633
+      },
+      "name": "surfvol:sign_consistent",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "J_ref_sign": -1.0,
+        "surf_ref_sign": -1.0
+      },
+      "name": "surfvol:sign_matches_J",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ratio_max": 0.0045162252281770515,
+        "ratio_min": 0.00033045550450075986
+      },
+      "name": "surfvol:ratio_finite",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "B_max": 7.830804159665519,
+        "B_min": 4.05906083791518
+      },
+      "name": "Bxy positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "dims": [
+          "x",
+          "y"
+        ],
+        "label": "shiftAngle monotonic in y",
+        "wrap_artifact": false
+      },
+      "name": "shift:shiftAngle:monotonic_y",
+      "severity": "WARN",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g11 > 0 (positive definite)",
+        "min": 0.9999999999999999
+      },
+      "name": "metric:g11:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g22 > 0 (positive definite)",
+        "min": 0.046696844560923566
+      },
+      "name": "metric:g22:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "count_nonpos": 0,
+        "message": "g33 > 0 (positive definite)",
+        "min": 17.639999999999997
+      },
+      "name": "metric:g33:positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "bad_points": 0,
+        "message": "Leading 2x2 principal minor > 0 (g11*g22 - g12^2)"
+      },
+      "name": "metric:leading_minor_2x2_positive",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "bad_count": 0,
+        "bad_fraction": 0.0,
+        "bad_threshold": 0.01,
+        "max_rel_error": 1.0619963272631204e-15,
+        "mean_rel_error": 1.8170268291891352e-16,
+        "worst_points": [
+          {
+            "R": 6.230070628861554,
+            "Z": -0.580611046672743,
+            "index": [
+              5,
+              52,
+              17
+            ],
+            "rel_error": 1.0619963272631204e-15
+          },
+          {
+            "R": 5.7865480077584825,
+            "Z": -0.1918133398721419,
+            "index": [
+              8,
+              36,
+              62
+            ],
+            "rel_error": 1.0341833990669603e-15
+          },
+          {
+            "R": 5.887670605272056,
+            "Z": -0.9273221700763093,
+            "index": [
+              15,
+              46,
+              22
+            ],
+            "rel_error": 1.025337661086389e-15
+          },
+          {
+            "R": 5.829375925692716,
+            "Z": 0.0415363688604097,
+            "index": [
+              6,
+              31,
+              30
+            ],
+            "rel_error": 1.0174157856861349e-15
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              31
+            ],
+            "rel_error": 9.59476926683924e-16
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              61
+            ],
+            "rel_error": 9.59476926683924e-16
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              32
+            ],
+            "rel_error": 9.59476926683924e-16
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              20
+            ],
+            "rel_error": 9.59476926683924e-16
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              2
+            ],
+            "rel_error": 9.59476926683924e-16
+          },
+          {
+            "R": 6.5296456715760005,
+            "Z": 0.9098348098196587,
+            "index": [
+              15,
+              8,
+              7
+            ],
+            "rel_error": 9.59476926683924e-16
+          }
+        ]
+      },
+      "name": "det(g_ij) \u2248 J\u00b2 (metric consistency)",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "message": "No Jacobian singularities at boundaries",
+        "min_abs": 1.3667999999999996,
+        "threshold": 1e-10
+      },
+      "name": "jacobian:boundary_min_abs",
+      "severity": "CRITICAL",
+      "status": "PASS"
+    },
+    {
+      "details": {
+        "ratio": 1439.925987124774,
+        "threshold": 1000000.0
+      },
+      "name": "metric:conditioning_ok",
+      "severity": "WARN",
+      "status": "PASS"
+    }
+  ],
+  "config_type": "LIMITER",
+  "critical_failures": [],
+  "dimensionality": "3D",
+  "g11_max": 2.889145390071969,
+  "g11_min": 0.9999999999999999,
+  "g22_max": 20.448484,
+  "g22_min": 0.046696844560923566,
+  "g33_max": 67.24000000000001,
+  "g33_min": 17.639999999999997,
+  "grid_format": "BOUT5_STYLE",
+  "grid_type": "UNIFORM_FLUX",
+  "kappa": 3.7769235736926743,
+  "metric_det_alt_mean_rel_err": 99575.01608411112,
+  "metric_det_max_rel_err": 1.0619963272631204e-15,
+  "metric_det_mean_rel_err": 1.8170268291891352e-16,
+  "metric_det_relation": "det(g_ij) \u2248 J\u00b2",
+  "metric_interpretation": "COVARIANT",
+  "nx": 64,
+  "ny": 64,
+  "nz": 64,
+  "render_img": "grid_iterish_k1.7_d0.33_render.png",
+  "surf_max": -0.0004516665835516384,
+  "surf_min": -0.16746343795089633,
+  "warnings": []
+}

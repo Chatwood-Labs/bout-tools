@@ -1,0 +1,43 @@
+# CITATION.cff
+# Citation metadata for the BOUT++ Tokamak Grid Diagnostics Utility
+#
+# This file allows GitHub, Zotero, and other tools to generate a proper
+# citation for this software. 
+
+cff-version: 1.2.0
+
+message: >
+  If you use this software for grid validation, diagnostics, or
+  reproducibility checks in published work, please cite it as below.
+
+title: "BOUT++ Tokamak Grid Diagnostics Utility"
+
+version: "1.0.0"
+
+date-released: 2026-01-07
+
+authors:
+  - family-names: Chatwood
+    given-names: Martin
+    affiliation: Chatwood Labs Ltd
+    email: martin@chatwoodlabs.com
+
+repository-code: "https://github.com/Chatwood-Labs/bout-tools"
+
+license: MIT
+
+keywords:
+  - plasma physics
+  - tokamak
+  - BOUT++
+  - numerical simulation
+  - grid diagnostics
+  - reproducibility
+  - scientific computing
+
+abstract: >
+  A standalone Python utility for validating and diagnosing BOUT++
+  tokamak grid files. The tool performs automated consistency checks
+  on metric tensors, Jacobians, curvature terms, and coordinate
+  structure, and generates structured reports suitable for regression
+  testing and reproducible scientific workflows.
