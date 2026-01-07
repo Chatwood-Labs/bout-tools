@@ -1,0 +1,22 @@
+*.nc
+!*.nc/
+__pycache__/
+*.egg-info/
+build/
+dist/
+.mypy_cache/
+.pytest_cache/
+*.png
+*.html
+*.json
+!bout_tokamak_grid_diagnostics/examples/*.png
+!bout_tokamak_grid_diagnostics/examples/**/*.png
+!bout_tokamak_grid_diagnostics/examples/**/*.html
+!bout_tokamak_grid_diagnostics/examples/**/*.json
+# Allow test grid fixtures (tiny netCDF files)
+!bout_tokamak_grid_diagnostics/tests/data/
+!bout_tokamak_grid_diagnostics/tests/data/grids/
+!bout_tokamak_grid_diagnostics/tests/data/grids/*.nc
+
+!bout_tokamak_grid/examples/*.nc
+!bout_tokamak_grid/examples/reports/*.png
